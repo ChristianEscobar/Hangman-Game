@@ -51,55 +51,70 @@ var winOrLoseDiv;
 var winsDiv;
 
 /* Entry point */
-function playGame() {
-	titleToGuessDiv = document.getElementById('title-to-guess');
-	userGuessListDiv = document.getElementById('user-guesses');
-	guessesRemainingDiv = document.getElementById("remaining-guesses");
-	winOrLoseDiv = document.getElementById("win-or-lose");
-	winsDiv = document.getElementById("wins");
+function startGame() {
+	initializeElements();
 
+	// Event listener
 	document.onkeyup = function(event) {
 		var userGuess = event.key;
 
 		if(userGuess !== 'Meta') {
 			if(isGuessInProgress) {
-				// If the user has already guessed this letter, skip processing
-				if(!letterAlreadyGuessed(userGuess)) {
-					checkUserGuess(userGuess);
-
-					displayTitleGuessProgress();
-
-					updateUserGuesses(userGuess, false);
-
-					updateNumberOfGuessesRemaining(false, 0);
-
-					if(isWinner()) {
-						// Debug only
-						//console.log('isWinner is true');
-
-						updateElementTextContent(winOrLoseDiv, 'YOU WIN!!!', false);
-
-						//Update wins counter
-						totalWins++;
-
-						//Update wins display
-						updateElementTextContent(winsDiv, totalWins, false);
-
-						isGuessInProgress = false;
-					} else if(!moreGuessesAllowed()) {
-							updateElementTextContent(winOrLoseDiv, 'YOU LOSE!', false);
-							
-							isGuessInProgress = false;
-					} else {
-						isGuessInProgress = true;
-					}
-				}
+				playGame(userGuess);
 			}
 			else {
 				resetGame();
 			}
 		}
 	};
+
+	return;
+}
+
+function initializeElements() {
+	titleToGuessDiv = document.getElementById('title-to-guess');
+	userGuessListDiv = document.getElementById('user-guesses');
+	guessesRemainingDiv = document.getElementById("remaining-guesses");
+	winOrLoseDiv = document.getElementById("win-or-lose");
+	winsDiv = document.getElementById("wins");
+
+	return;
+}
+
+function playGame(userGuess) {
+	// If the user has already guessed this letter, skip processing
+	if(letterAlreadyGuessed(userGuess)) {
+		return;
+	}
+
+	checkUserGuess(userGuess);
+
+	displayTitleGuessProgress();
+
+	updateUserGuesses(userGuess, false);
+
+	updateNumberOfGuessesRemaining(false, 0);
+
+	if(isWinner()) {
+		// Debug only
+		//console.log('isWinner is true');
+
+		updateElementTextContent(winOrLoseDiv, 'YOU WIN!!!', false);
+
+		//Update wins counter
+		totalWins++;
+
+		//Update wins display
+		updateElementTextContent(winsDiv, totalWins, false);
+
+		isGuessInProgress = false;
+	} else if(!moreGuessesAllowed()) {
+		updateElementTextContent(winOrLoseDiv, 'YOU LOSE!', false);
+		
+		isGuessInProgress = false;
+	} else {
+		isGuessInProgress = true;
+	}
 
 	return;
 }
