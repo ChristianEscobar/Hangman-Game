@@ -1,20 +1,11 @@
-/*
-If word has not been chosen
-	choose a word
-else
-	get user input
-	check if user input previously used
-*/
-
-var wordList = ["Super Mario Bros",
+var titleList = ["Super Mario Bros",
 								"The Legend of Zelda",
 								"Portal",
-								"Half-Life",
+								"Half Life",
 								"Super Metroid",
 								"Halo",
 								"Tetris",
 								"Super Mario World",
-								"Sid Meiers Pirates",
 								"Chrono Trigger",
 								"Minecraft",
 								"Grand Theft Auto",
@@ -33,64 +24,79 @@ var wordList = ["Super Mario Bros",
 								"Silent Hill",
 								"Journey",
 								"Resident Evil",
-								"Diablo"];
+								"Diablo",
+								"Pac Man",
+								"Mrs Pac Man",
+								"Contra",
+								"Dig Dug",
+								"Mortal Kombat",
+								"Tekken"];
+
+// For debug only
+//var titleList = ["Sid Meiers Pirates"];
 
 var isGuessInProgress = false;
-var currentWord;
-var wordGuessProgress = [];
-var numberOfGuessesRemaining = 15;
+var currentTitle;
+var titleGuessProgress = [];
+var guessStack = [];
+var numberOfGuessesRemaining;
 var totalCorrect = 0;
 var totalToWin = 0;
+var totalWins = 0;
 
-var wordToGuessDiv;
+var titleToGuessDiv;
 var userGuessListDiv;
 var guessesRemainingDiv;
 var winOrLoseDiv;
+var winsDiv;
 
+/* Entry point */
 function playGame() {
-	wordToGuessDiv = document.getElementById('word-to-guess');
+	titleToGuessDiv = document.getElementById('title-to-guess');
 	userGuessListDiv = document.getElementById('user-guesses');
 	guessesRemainingDiv = document.getElementById("remaining-guesses");
 	winOrLoseDiv = document.getElementById("win-or-lose");
+	winsDiv = document.getElementById("wins");
 
 	document.onkeyup = function(event) {
 		var userGuess = event.key;
 
 		if(userGuess !== 'Meta') {
 			if(isGuessInProgress) {
-				checkUserGuess(userGuess);
+				// If the user has already guessed this letter, skip processing
+				if(!letterAlreadyGuessed(userGuess)) {
+					checkUserGuess(userGuess);
 
-				displayWordGuessProgress();
+					displayTitleGuessProgress();
 
-				updateUserGuesses(userGuess);
+					updateUserGuesses(userGuess, false);
 
-				//updateNumberOfGuessesRemaining(false);
+					updateNumberOfGuessesRemaining(false, 0);
 
-				if(isWinner()) {
-					// Debug only
-					console.log('isWinner is true');
+					if(isWinner()) {
+						// Debug only
+						//console.log('isWinner is true');
 
-					updateElementTextContent(winOrLoseDiv, 'YOU WIN!!!', false);
+						updateElementTextContent(winOrLoseDiv, 'YOU WIN!!!', false);
 
-					isGuessInProgress = false;
-				} else if(!moreGuessesAllowed()) {
-						updateElementTextContent(winOrLoseDiv, 'YOU LOSE!', false);
-						
+						//Update wins counter
+						totalWins++;
+
+						//Update wins display
+						updateElementTextContent(winsDiv, totalWins, false);
+
 						isGuessInProgress = false;
-				} else {
-					isGuessInProgress = true;
+					} else if(!moreGuessesAllowed()) {
+							updateElementTextContent(winOrLoseDiv, 'YOU LOSE!', false);
+							
+							isGuessInProgress = false;
+					} else {
+						isGuessInProgress = true;
+					}
 				}
 			}
 			else {
-				//updateElementTextContent(winOrLoseDiv, '', false);
-
-				clearUserGuesses();
-
-				setupNewWord();
-
-				displayWordGuessProgress();
-
-				isGuessInProgress = true;
+				resetGame();
 			}
 		}
 	};
@@ -98,59 +104,118 @@ function playGame() {
 	return;
 }
 
-function setupNewWord() {
-	// Choose a word for user to guess
-	currentWord = wordList[Math.floor(Math.random() * wordList.length)];
+function resetGame() {
+	updateElementTextContent(winOrLoseDiv, '', false);
 
-	console.log(currentWord);
+	// Clear user guesses display
+	updateElementTextContent(userGuessListDiv, '', false);
 
-	// For Debug Only
-	//console.log(currentWord);
-	//console.log("> " + currentWord.length);
+	// Update wins display back to 0
+	updateElementTextContent(winsDiv, totalWins, false);
 
-	// Since this is a new word, setup the display div
-	updateElementTextContent(wordToGuessDiv, '', false);
+	// Update guesses remaining display
+	updateElementTextContent(guessesRemainingDiv, numberOfGuessesRemaining, false);
 
-	// Clear the word guess progress array
-	wordGuessProgress = [];
+	setupNewTitle();
 
-	for(var i=0; i<currentWord.length; i++) {
-		wordGuessProgress.push("_");
-	}
+	// Reset number of guesses remaining
+	updateNumberOfGuessesRemaining(true, 15);
 
-	// Set the total to win value
-	totalToWin = currentWord.length;
+	// Called to clear the guess stack
+	updateUserGuesses('', true);
+
+	// At this point the progress should be set to all underscores
+	displayTitleGuessProgress();
+
+	isGuessInProgress = true;
 
 	return;
 }
 
-function displayWordGuessProgress() {
-	for(var i=0; i<wordGuessProgress.length; i++) {
-		if(i === 0) {
-			updateElementTextContent(wordToGuessDiv, wordGuessProgress[i] + '    ', false);
+// Sets up a new title for user to guess by randomly choosing from the title list array
+function setupNewTitle() {
+	// Reset total correct counter
+	totalCorrect = 0;
+
+	// Choose a title for user to guess
+	currentTitle = titleList[Math.floor(Math.random() * titleList.length)];
+
+	// For Debug Only
+	//console.log(currentTitle);
+	//console.log(currentTitle);
+	//console.log("> " + currentTitle.length);
+
+	// Since this is a new title setup the display div
+	updateElementTextContent(titleToGuessDiv, '', false);
+
+	// Clear the title guess progress array
+	titleGuessProgress = [];
+
+	// Setup the guess progress array
+	// If the word contains spaces, increment the correct guess counter
+	for(var i=0; i<currentTitle.length; i++) {
+		if(currentTitle.charAt(i) === ' ') {
+			// DEBUG only
+			//console.log('Space found in title!');
+
+			// Push a dash as separator
+			titleGuessProgress.push('-');
+
+			totalCorrect++;
 		} else {
-			updateElementTextContent(wordToGuessDiv, wordGuessProgress[i] + '    ', true);
+			titleGuessProgress.push('_');	 
+		}
+	}
+
+	// Set the total to win value
+	totalToWin = currentTitle.length;
+
+	return;
+}
+
+// Updates the guess progress display
+function displayTitleGuessProgress() {
+
+	//console.log(titleGuessProgress);
+
+	// Since titles can contain spaces, we want the spaces treated as new lines in the display
+	for(var i=0; i<titleGuessProgress.length; i++) {
+
+		if(i === 0) {
+			updateElementTextContent(titleToGuessDiv, titleGuessProgress[i] + '    ', false);
+		} else {
+			updateElementTextContent(titleToGuessDiv, titleGuessProgress[i] + '    ', true);
 		}
 	}
 
 	return;
 }
 
-function updateUserGuesses(userGuess) {
-	updateElementTextContent(userGuessListDiv, ' ' + userGuess, true);
+// Updates the user guesses stack
+// If clearStack is true, userGuess will be ignored
+function updateUserGuesses(userGuess, clearStack) {
+	if(clearStack) {
+		guessStack = [];
+	} else {
+		// Update the display div
+		updateElementTextContent(userGuessListDiv, ' ' + userGuess.toUpperCase(), true);
 
+		// Push it to the stack
+		guessStack.push(userGuess);
+	}
+	
 	return;
 }
 
-function clearUserGuesses() {
-	updateElementTextContent(userGuessListDiv, '', false);
-
-	return;
-}
-
+// Checks if the user input is contained in the title currently being guessed
 function checkUserGuess(userGuess) {
-	// Check if userGuess is contained within the current word
-	var indexOfGuess = currentWord.toLowerCase().indexOf(userGuess);
+	// Ignore "-" and "_"
+	if(userGuess === '-' || userGuess === '_') {
+		return;
+	}
+
+	// Check if userGuess is contained within the current title
+	var indexOfGuess = currentTitle.toLowerCase().indexOf(userGuess);
 
 	// Debug ONLY
 	//console.log("indexOfGuess", indexOfGuess);
@@ -158,9 +223,9 @@ function checkUserGuess(userGuess) {
 	while(indexOfGuess >= 0) {
 		totalCorrect++;
 
-		wordGuessProgress[indexOfGuess] = userGuess;
+		titleGuessProgress[indexOfGuess] = userGuess;
 
-		indexOfGuess = currentWord.toLowerCase().indexOf(userGuess, indexOfGuess + 1);
+		indexOfGuess = currentTitle.toLowerCase().indexOf(userGuess, indexOfGuess + 1);
 
 		// Debug ONLY
 		//console.log("indexOfGuess", indexOfGuess);
@@ -169,20 +234,24 @@ function checkUserGuess(userGuess) {
 	return;
 }
 
-function updateNumberOfGuessesRemaining(resetGuesses) {
+// Updates the number of guesses counter by subtracting one, if resetGuesses is true, it will set the value to the specified value
+function updateNumberOfGuessesRemaining(resetGuesses, toThisValue) {
 	if(resetGuesses) {
-		numberOfGuessesRemaining = 15;
+		numberOfGuessesRemaining = toThisValue;
 	}
 	else {
 		numberOfGuessesRemaining--;
 	}
 
+	// Update display
 	updateElementTextContent(guessesRemainingDiv, numberOfGuessesRemaining, false);
 
 	return;
 }
 
+// Checks if the user is a winner
 function isWinner() {
+	//console.log("totalCorrect", totalCorrect, "totalToWin", totalToWin);
 	if(totalCorrect === totalToWin) {
 		return true;
 	}
@@ -190,6 +259,7 @@ function isWinner() {
 	return false;
 }
 
+// Checks if the user can continue guessing
 function moreGuessesAllowed() {
 	if(numberOfGuessesRemaining >= 1) {
 		return true;
@@ -198,6 +268,7 @@ function moreGuessesAllowed() {
 	return false;
 }
 
+// Updates the text for the specified HTML element.  If append is true, text provided will be appended to any existing content.
 function updateElementTextContent(element, text, append) {
 	if(append) {
 		element.textContent += text;
@@ -206,4 +277,15 @@ function updateElementTextContent(element, text, append) {
 	}
 
 	return;
+}
+
+// Check if the user input is already part of the guess stack
+function letterAlreadyGuessed(userGuess) {
+	var indexInStack = guessStack.indexOf(userGuess);
+
+	if(indexInStack >= 0) {
+		return true;
+	}
+
+	return false;
 }
