@@ -1,0 +1,52 @@
+body {
+	background-image: url("../images/arcade_cabinet_bg.png");
+	background-size: 100vw 110vh;
+}
+
+
+#game-arena {
+	position: relative;
+	top: 130px;
+	left: 570px;
+	width: 550px;
+	height: 220px;
+}
+
+.panel {
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+#game-title {
+	position: absolute;
+	/*top: 125px;
+	left: 570px;*/
+	font-family: 'Monoton', cursive;
+	font-size: 5.5em;
+	width: 20px;
+	text-shadow: 2px 2px white;
+}
+
+#game-subtitle {
+	position: absolute;
+	top: 101px;
+	left: 320px;
+	font-family: 'Rock Salt', cursive;
+	color: red;
+	font-size: .2em;
+	width: 186px
+}
+
+#any-key-msg {
+	position: absolute;
+	font-family: 'Share Tech Mono', monospace;
+	top: 200px;
+	color: #ffffff;
+	animation: blinker 1s linear infinite;
+}
+
+
+@keyframes blinker {  
+  50% { opacity: 0; }
+}
