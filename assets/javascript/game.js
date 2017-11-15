@@ -56,6 +56,10 @@ var userGuessListDiv;
 var guessesRemainingDiv;
 var winLoseDiv;
 var winsDiv;
+var insertCoinAudio;
+var loseGameAudio;
+var winGameAudio;
+var correctAudio;
 
 // Entry point
 function startGame() {
@@ -85,6 +89,10 @@ function initializeElements() {
 	guessesRemainingDiv = document.getElementById("remaining-guesses");
 	winLoseDiv = document.getElementById("win-lose");
 	winsDiv = document.getElementById("wins");
+	insertCoinAudio = document.getElementById("insert-coin");
+	loseGameAudio = document.getElementById("lose-game");
+	winGameAudio = document.getElementById("win-game");
+	correctAudio = document.getElementById("correct");
 
 	return;
 }
@@ -119,6 +127,10 @@ function playGame(userGuess) {
 		// Debug only
 		//console.log('isWinner is true');
 
+		// Play win game audio
+		winGameAudio.play();
+
+		// Display winner
 		showWinOrLose(true);
 
 		//Update wins counter
@@ -129,6 +141,10 @@ function playGame(userGuess) {
 
 		isGuessInProgress = false;
 	} else if(!moreGuessesAllowed()) {
+		// Play lose game audio
+		loseGameAudio.play();
+
+		// Display lose
 		showWinOrLose(false);
 		
 		isGuessInProgress = false;
@@ -141,6 +157,9 @@ function playGame(userGuess) {
 
 // Contains logic to setup a new game
 function resetGame() {
+	// Play insert coin audio
+	insertCoinAudio.play();
+
 	// Hide the win/lose div element
 	showHideElement(winLoseDiv, false);
 
@@ -253,6 +272,8 @@ function checkUserGuess(userGuess) {
 	//console.log("indexOfGuess", indexOfGuess);
 
 	while(indexOfGuess >= 0) {
+		correctAudio.play();
+
 		totalCorrect++;
 
 		titleGuessProgress[indexOfGuess] = userGuess;
