@@ -4,6 +4,16 @@ body {
 	/*font-family: 'Share Tech Mono', monospace;*/
 }
 
+#win-lose {
+	position: absolute;
+	top: 10px;
+	left: 100px;
+	width: 313px;
+	height: 232px;
+	background-repeat: no-repeat;
+	z-index: 1;
+}
+
 
 #game-arena {
 	position: relative;
@@ -11,7 +21,6 @@ body {
 	left: 570px;
 	width: 550px;
 	height: 220px;
-	text-align: center;
 }
 
 .panel {
@@ -53,20 +62,23 @@ body {
 #title-to-guess {
 	position: absolute;
 	top: 250px;
-	left: 50px;
+	left: 10px;
 	color: #ff8000;
 	font-size: 2.5em;	
 	width: 100%;
-	display: inline-block;
+	height: 50px;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 50px;
 }
 
 #wins-container {
 	position: absolute;
-	top: 200px;
-	left: 100px;
-	font-family: 'Share Tech Mono', monospace;
+	top: 10px;
+	left: 450px;
+	/*font-family: 'Share Tech Mono', monospace;
 	font-size: 1.5em;
-	color: #ffffff;
+	color: #ffffff;*/
 }
 
 #game-info-panel {
@@ -79,10 +91,6 @@ body {
 	color: #ffffff;
 	font-size: 1.2em;
 	background-color: #e5e4d7;
-}
-
-#game-info-heading {
-	background-color: #fffff;
 }
 
 @keyframes blinker {  

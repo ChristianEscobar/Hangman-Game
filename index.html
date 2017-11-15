@@ -20,12 +20,10 @@
 
 	    <!-- Fonts -->
 	    <link href="https://fonts.googleapis.com/css?family=Monoton|Rock+Salt|Share+Tech+Mono" rel="stylesheet">
-
-	    <!-- Game Javascript -->
-	    <script type="text/javascript" src="assets/javascript/game.js"></script>
 	</head>
 	<body>
 		<div id="game-arena">
+			<div id="win-lose"></div>
 			<div class="panel panel-default">
   			<div id="game-title" class="panel-body">
     			HANGMAN<span id="game-subtitle">Video Games Edition</span>
@@ -38,10 +36,11 @@
 
 			<div id="title-to-guess"></div>
 
-			<div id="wins-container">Wins: <span id="wins"></span></div>
-
 			<div id="game-info-panel" class="panel panel-default">
-				<div id="game-info-heading" class="panel-heading">Player 1</div>
+				<div id="game-info-heading" class="panel-heading">
+					Player 1
+					<div id="wins-container">Wins: <span id="wins"></span></div>
+				</div>
 				<div class="panel-body">
 					<div id="guesses-container">
 						Number of Guesses Remaining:  <span id="remaining-guesses"></span>
@@ -51,10 +50,10 @@
 						Already Guessed:  <span id="user-guesses"></span>
 					</div>
 				</div>
-
-			<div id="win-or-lose"></div>
 		</div>
 
+		<!-- Game Javascript -->
+	  <script type="text/javascript" src="assets/javascript/game.js"></script>
 		<script>
 			startGame();
 		</script>

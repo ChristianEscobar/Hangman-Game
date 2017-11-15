@@ -30,10 +30,17 @@ var titleList = ["Super Mario Bros",
 								"Contra",
 								"Dig Dug",
 								"Mortal Kombat",
-								"Tekken"];
+								"Tekken",
+								"Pokemon",
+								"Call of Duty",
+								"Fallout",
+								"Donkey Kong",
+								"Tony Hawks Pro Skate",
+								"Sonic The Hedgehog",
+								"Galaga"];
 
 // For debug only
-//var titleList = ["Sid Meiers Pirates"];
+//var titleList = ["Metal Gear Solid"];
 
 var isGuessInProgress = false;
 var currentTitle;
@@ -47,10 +54,10 @@ var totalWins = 0;
 var titleToGuessDiv;
 var userGuessListDiv;
 var guessesRemainingDiv;
-var winOrLoseDiv;
+var winLoseDiv;
 var winsDiv;
 
-/* Entry point */
+// Entry point
 function startGame() {
 	initializeElements();
 
@@ -58,7 +65,7 @@ function startGame() {
 	document.onkeyup = function(event) {
 		var userGuess = event.key;
 
-		if(userGuess !== 'Meta') {
+		if(keyValidation(userGuess)) {
 			if(isGuessInProgress) {
 				playGame(userGuess);
 			}
@@ -71,16 +78,29 @@ function startGame() {
 	return;
 }
 
+// Initializes variables used to access DOM elements
 function initializeElements() {
 	titleToGuessDiv = document.getElementById('title-to-guess');
 	userGuessListDiv = document.getElementById('user-guesses');
 	guessesRemainingDiv = document.getElementById("remaining-guesses");
-	winOrLoseDiv = document.getElementById("win-or-lose");
+	winLoseDiv = document.getElementById("win-lose");
 	winsDiv = document.getElementById("wins");
 
 	return;
 }
 
+// Checks if user input is a prohibited key
+function keyValidation(userGuess) {
+	if(userGuess === 'Meta' ||
+			userGuess === '-' ||
+			userGuess == ' ') {
+		return false;
+	}
+
+	return true;
+}
+
+// Contains logic to play the game
 function playGame(userGuess) {
 	// If the user has already guessed this letter, skip processing
 	if(letterAlreadyGuessed(userGuess)) {
@@ -99,7 +119,7 @@ function playGame(userGuess) {
 		// Debug only
 		//console.log('isWinner is true');
 
-		updateElementTextContent(winOrLoseDiv, 'YOU WIN!!!', false);
+		showWinOrLose(true);
 
 		//Update wins counter
 		totalWins++;
@@ -109,7 +129,7 @@ function playGame(userGuess) {
 
 		isGuessInProgress = false;
 	} else if(!moreGuessesAllowed()) {
-		updateElementTextContent(winOrLoseDiv, 'YOU LOSE!', false);
+		showWinOrLose(false);
 		
 		isGuessInProgress = false;
 	} else {
@@ -119,8 +139,10 @@ function playGame(userGuess) {
 	return;
 }
 
+// Contains logic to setup a new game
 function resetGame() {
-	updateElementTextContent(winOrLoseDiv, '', false);
+	// Hide the win/lose div element
+	showHideElement(winLoseDiv, false);
 
 	// Clear user guesses display
 	updateElementTextContent(userGuessListDiv, '', false);
@@ -224,11 +246,6 @@ function updateUserGuesses(userGuess, clearStack) {
 
 // Checks if the user input is contained in the title currently being guessed
 function checkUserGuess(userGuess) {
-	// Ignore "-" and "_"
-	if(userGuess === '-' || userGuess === '_') {
-		return;
-	}
-
 	// Check if userGuess is contained within the current title
 	var indexOfGuess = currentTitle.toLowerCase().indexOf(userGuess);
 
@@ -303,4 +320,30 @@ function letterAlreadyGuessed(userGuess) {
 	}
 
 	return false;
+}
+
+// Will display the win or lose image
+function showWinOrLose(isWinner) {
+	var winLoseDiv = document.getElementById('win-lose');
+
+	if(isWinner) {
+		winLoseDiv.style.backgroundImage = "url('./assets/images/win.png')";
+	} else {
+		winLoseDiv.style.backgroundImage = "url('./assets/images/pwned.png')";
+	}
+
+	showHideElement(winLoseDiv, true);
+
+	return;
+}
+
+// Shows or hides the specified element
+function showHideElement(element, show) {
+	if(show) {
+		element.style.display = 'block';
+	} else {
+		element.style.display = 'none';
+	}
+
+	return;
 }
