@@ -1,7 +1,14 @@
-body {
-	background-image: url("../images/arcade_cabinet_bg.png");
-	background-size: 100vw 110vh;
-	/*font-family: 'Share Tech Mono', monospace;*/
+#bg-image {
+	position: relative; 
+	background-size: cover;
+}
+
+#game-container {
+	position: absolute;
+	top: 15%;
+	left: 33%;
+	width: 35%;
+	text-align: center;
 }
 
 #win-lose {
@@ -14,24 +21,23 @@ body {
 	z-index: 1;
 }
 
-
-#game-arena {
-	position: relative;
-	top: 130px;
-	left: 570px;
-	width: 550px;
-	height: 220px;
-}
-
 .panel {
 	border: none;
 	margin: 0;
 	padding: 0;
 }
 
+.panel-transparent {
+	background: none;
+}
+
+.panel {
+	border: 0;
+}
+
 #game-title {
-	position: absolute;
-	/*top: 125px;
+	/*position: absolute;
+	top: 125px;
 	left: 570px;*/
 	font-family: 'Monoton', cursive;
 	font-size: 5.5em;
@@ -50,7 +56,7 @@ body {
 }
 
 #any-key-msg {
-	position: absolute;
+	/*position: absolute;*/
 	font-family: 'Share Tech Mono', monospace;
 	top: 150px;
 	left: 100px;
@@ -59,8 +65,13 @@ body {
 	animation: blinker 1s linear infinite;
 }
 
+#title-to-guess-row {
+	padding: 10%;
+}
+
+
 #title-to-guess {
-	position: absolute;
+	/*position: absolute;*/
 	top: 250px;
 	left: 10px;
 	color: #ff8000;
@@ -81,8 +92,12 @@ body {
 	color: #ffffff;*/
 }
 
+#game-info-row {
+	padding-top: 1%;
+}
+
 #game-info-panel {
-	position: absolute;
+	/*position: absolute;*/
 	top: 330px;
 	left: 10px;
 	width: 560px;
@@ -91,8 +106,67 @@ body {
 	color: #ffffff;
 	font-size: 1.2em;
 	background-color: #e5e4d7;
+	text-align: left;
 }
 
 @keyframes blinker {  
   50% { opacity: 0; }
+}
+
+@media screen and (max-width:  980px) {
+	#arcade-cabinet {
+		content: url('../images/arcade_cabinet_bg_980w.png');
+	}
+
+	#game-container {
+		top: 15%;
+		left: 20%;
+		width: 70%;
+	}
+
+	#wins-container {
+		left: 70%;
+		width: 50%;
+	}
+}
+
+@media screen and (max-width:  768px) {
+	#arcade-cabinet {
+		content: url('../images/arcade_cabinet_bg_980w.png');
+	}
+
+	#game-container {
+		top: 10%;
+		left: 13%;
+	}
+
+	#wins-container {
+		left: 170%;
+		width: 50%;
+	}
+}
+
+@media screen and (max-width:  640px) {
+	#arcade-cabinet {
+		content: url('../images/arcade_cabinet_bg_640w.png');
+	}
+
+	#game-container {
+		top: 15%;
+		left: 4%;
+		width: 80%;
+	}
+
+	#wins-container {
+		left: 90%;
+		width: 50%;
+	}
+
+	#title-to-guess-row {
+		padding-top: 10%;
+	}
+	
+	#game-info-row {
+		padding-top: 15%;
+	}
 }
