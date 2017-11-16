@@ -25,14 +25,11 @@
 	border: none;
 	margin: 0;
 	padding: 0;
+	box-shadow: none;
 }
 
 .panel-transparent {
 	background: none;
-}
-
-.panel {
-	border: 0;
 }
 
 #game-title {
@@ -75,8 +72,7 @@
 	top: 250px;
 	left: 10px;
 	color: #ff8000;
-	font-size: 2.5em;	
-	width: 100%;
+	font-size: 2em;	
 	height: 50px;
 	text-align: center;
 	vertical-align: middle;
