@@ -345,7 +345,7 @@ function letterAlreadyGuessed(userGuess) {
 
 // Will display the win or lose image
 function showWinOrLose(isWinner) {
-	var winLoseDiv = document.getElementById('win-lose');
+	//var winLoseDiv = document.getElementById('win-lose');
 
 	if(isWinner) {
 		winLoseDiv.style.backgroundImage = "url('./assets/images/win.png')";
