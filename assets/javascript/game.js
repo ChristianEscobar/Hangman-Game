@@ -1,4 +1,4 @@
-/*var titleList = ["Super Mario Bros",
+var titleList = ["Super Mario Bros",
 								"The Legend of Zelda",
 								"Portal",
 								"Half Life",
@@ -37,10 +37,10 @@
 								"Donkey Kong",
 								"Tony Hawks Pro Skater",
 								"Sonic The Hedgehog",
-								"Galaga"];*/
+								"Galaga"];
 
 // For debug only
-var titleList = ["Star Wars TIE Fighter"];
+/*var titleList = ["Star Wars TIE Fighter"];*/
 
 var isGuessInProgress = false;
 var currentTitle;
