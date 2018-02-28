@@ -1,3 +1,6 @@
 # Hangman-Game
 
-A video game themed Hangman game utilizing HTML/CSS/Javascript
+![Hangman](assets/images/github/GameScreenshot.png)
+
+## Under the Hood
+This game was created using HTML/CSS/Javascript
